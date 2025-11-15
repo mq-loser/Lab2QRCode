@@ -9,7 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/bin)
 
 include_directories(include)
 
-# set(CMAKE_PREFIX_PATH "D:/dagong/test/vcpkg/installed/x64-windows" ${CMAKE_PREFIX_PATH})
+set(CMAKE_PREFIX_PATH $ENV{VCPKG_LIB} ${CMAKE_PREFIX_PATH})
 #set(CMAKE_PREFIX_PATH  $ENV{QT5_15_STATIC} ${CMAKE_PREFIX_PATH})
 
 if(MSVC)
