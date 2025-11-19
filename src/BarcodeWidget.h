@@ -90,7 +90,7 @@ private slots:
     /**
      * @brief 显示关于软件的信息对话框。
      */
-    void showAbout();
+    void showAbout() const;
 
     /**
      * @brief 将条码格式枚举转换为字符串表示。

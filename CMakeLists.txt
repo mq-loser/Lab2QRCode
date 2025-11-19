@@ -12,6 +12,17 @@ include_directories(include)
 set(CMAKE_PREFIX_PATH $ENV{VCPKG_LIB} ${CMAKE_PREFIX_PATH})
 #set(CMAKE_PREFIX_PATH  $ENV{QT5_15_STATIC} ${CMAKE_PREFIX_PATH})
 
+add_custom_target(
+    RunPowerShellScript ALL
+    COMMAND ${CMAKE_COMMAND} -E echo "Running PowerShell script..."
+    COMMAND powershell -ExecutionPolicy Bypass -File ${CMAKE_SOURCE_DIR}/version_info.ps1
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/version_info
+    COMMENT "Executing PowerShell script to generate repository code information"
+)
+
+message(STATUS "PowerShell command: powershell -ExecutionPolicy Bypass -File ${CMAKE_SOURCE_DIR}/version_info.ps1")
+
+
 if(MSVC)
     add_compile_options(/EHsc /utf-8 /bigobj)
 endif()
@@ -42,7 +53,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${OpenCV_LIBS}
     Boost::headers
     Boost::random
-    spdlog::spdlog
+    spdlog::spdlog_header_only
 )
 
 add_custom_command(

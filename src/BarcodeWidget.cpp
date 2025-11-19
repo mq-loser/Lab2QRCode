@@ -22,6 +22,7 @@
 #include <SimpleBase64.h>
 #include <spdlog/spdlog.h>
 #include "BarcodeWidget.h"
+#include "version_info/version.h"
 
 QImage BarcodeWidget::MatToQImage(const cv::Mat& mat) const
 {
@@ -44,7 +45,7 @@ BarcodeWidget::BarcodeWidget(QWidget* parent)
     QMenuBar* menuBar = new QMenuBar(this);
     QMenu* helpMenu = menuBar->addMenu("帮助");
 
-    QFont menuFont("SimHei", 12);  // 可商用字体
+    QFont menuFont("SimHei", 12);
     menuBar->setFont(menuFont);
 
     QAction* aboutAction = new QAction("关于软件", this);
@@ -485,7 +486,20 @@ cv::Mat BarcodeWidget::loadImageFromFile(const QString& filePath) {
     return img;
 }
 
-void BarcodeWidget::showAbout() {
-    // todo.. 后续修改，弹出对话框，版本信息等需要 cmake build 时调用脚本生成 cpp 文件得到，设置
-    QMessageBox::information(this, "软件信息", "Lab2QRCode - 版本 v1.8\n一个工具，用于生成和解码条码。");
+void BarcodeWidget::showAbout() const {
+    const QString tag = version::git_tag.data();
+    const QString hash = version::git_hash.data();
+    const QString barnch = version::git_branch.data();
+    const QString commitTime = version::git_commit_time.data();
+    const QString buildTime = version::build_time.data();
+
+    QMessageBox::information(
+        nullptr, "软件信息:\n", 
+        "Lab2QRCode\n"
+        "版本: " + tag + "\n"
+        "Git Hash: " + hash + "\n"
+        "分支: " + barnch + "\n"
+        "提交时间: " + commitTime + "\n"
+        "构建时间: " + buildTime
+    );
 }
