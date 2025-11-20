@@ -1,0 +1,76 @@
+QDialog {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+        stop: 0 #2c3e50, stop: 1 #34495e);
+    color: white;
+    font-family: "Consolas", "Microsoft YaHei", sans-serif;
+}
+
+QLabel {
+    background: transparent;
+    color: white;
+}
+
+QLabel#title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+    padding: 10px;
+}
+
+QLabel#subtitle {
+    font-size: 14px;
+    color: #bdc3c7;
+    padding: 5px;
+}
+
+QLabel#infoLabel {
+    font-size: 14px;
+    color: #ecf0f1;
+    padding: 2px;
+}
+
+QLabel#valueLabel {
+    font-size: 14px;
+    color: #3498db;
+    font-weight: bold;
+    padding: 2px;
+}
+
+QLabel#author {
+    font-size: 15px;
+    color: #e74c3c;
+    padding: 8px;
+}
+
+QLabel#github {
+    font-size: 18px;
+    color: #1abc9c;
+    padding: 5px;
+}
+
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+        stop: 0 #3498db, stop: 1 #2980b9);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    margin: 5px;
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+        stop: 0 #3cb0fd, stop: 1 #3498db);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+        stop: 0 #2980b9, stop: 1 #2473a6);
+}
+
+QFrame#separator {
+    background: #34495e;
+    max-height: 1px;
+    margin: 8px 0px;
+}
