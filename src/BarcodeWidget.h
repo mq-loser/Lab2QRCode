@@ -12,6 +12,7 @@ class QLabel;
 class QScrollArea;
 class QCheckBox;
 class QComboBox;
+class QFileDialog;
 
 /**
  * @class BarcodeWidget
@@ -70,7 +71,7 @@ private slots:
     /**
      * @brief 打开文件浏览器并选择一个文件，在文本框显示选择的文件路径。
      */
-    void onBrowseFile();
+    void onBrowseFile() const;
 
     /**
      * @brief 根据调用 onBrowseFile 选择的文件生成二维码并显示。
@@ -130,5 +131,6 @@ private:
     ZXing::BarcodeFormat currentBarcodeFormat = ZXing::BarcodeFormat::QRCode;  /**< 当前选择的条码格式  */
     QLineEdit* widthInput;        /**< 图片宽度输入框  */
     QLineEdit* heightInput;       /**< 图片高度输入框  */
+    QFileDialog* fileDialog;      /**< 文件选择弹窗    */
     std::unique_ptr<MqttSubscriber> subscriber_;  /**< MQTT 订阅者实例  */
 };

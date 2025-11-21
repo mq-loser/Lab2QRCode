@@ -158,6 +158,9 @@ BarcodeWidget::BarcodeWidget(QWidget* parent)
 
     mainLayout->addLayout(sizeLayout);
 
+    fileDialog = new QFileDialog(this, "Select File", "", "Supported Files (*.rfa *.txt *.png);;All Files (*)");
+    fileDialog->setModal(false);
+
     MqttConfig config = MqttSubscriber::load_config("./setting/config.json");
 
     subscriber_ = std::make_unique<MqttSubscriber>(config.host, config.port, config.client_id,
@@ -182,6 +185,13 @@ BarcodeWidget::BarcodeWidget(QWidget* parent)
     connect(this, &BarcodeWidget::mqttMessageReceived, this, [this](const QString& topic, const QString& payload) {
         QMessageBox::information(this, "订阅消息",
             QString("主题: %1\n内容: %2").arg(topic, payload));
+    });
+    connect(fileDialog, &QFileDialog::fileSelected, this, [this](const QString& fileName) {
+        if (!fileName.isEmpty()) {
+            filePathEdit->setText(fileName);
+            barcodeLabel->clear();
+            updateButtonStates(fileName);
+        }
     });
 }
 
@@ -222,15 +232,9 @@ void BarcodeWidget::updateButtonStates(const QString& filePath) const
     }
 }
 
-void BarcodeWidget::onBrowseFile()
+void BarcodeWidget::onBrowseFile() const
 {
-    const QString fileName = QFileDialog::getOpenFileName(this, "Select File", "", "Supported Files (*.rfa *.png);;All Files (*)");
-    if (!fileName.isEmpty()) {
-        filePathEdit->setText(fileName);
-        barcodeLabel->clear();
-
-        updateButtonStates(fileName);
-    }
+    fileDialog->open();
 }
 
 void BarcodeWidget::onGenerateClicked()
