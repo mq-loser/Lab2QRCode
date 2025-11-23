@@ -1,9 +1,14 @@
 #pragma once
 
-#include <QImage>
+#include <vector>
+
 #include <QWidget>
 #include <ZXing/BarcodeFormat.h>
 #include <opencv2/opencv.hpp>
+#include <qfuturewatcher.h>
+
+
+#include "convert.h"
 #include "mqtt/mqtt_client.h"
 
 class QLineEdit;
@@ -13,6 +18,7 @@ class QScrollArea;
 class QCheckBox;
 class QComboBox;
 class QFileDialog;
+class QProgressBar;
 
 /**
  * @class BarcodeWidget
@@ -33,26 +39,26 @@ public:
 
 private:
     static inline const QStringList barcodeFormats = {
-        "QRCode", // ZXing::BarcodeFormat::QRCode
-        "Aztec", // ZXing::BarcodeFormat::Aztec
-        "Codabar", // ZXing::BarcodeFormat::Codabar
-        "Code39", // ZXing::BarcodeFormat::Code39
-        "Code93", // ZXing::BarcodeFormat::Code93
-        "Code128", // ZXing::BarcodeFormat::Code128
-        "DataBar", // ZXing::BarcodeFormat::DataBar
+        "QRCode",          // ZXing::BarcodeFormat::QRCode
+        "Aztec",           // ZXing::BarcodeFormat::Aztec
+        "Codabar",         // ZXing::BarcodeFormat::Codabar
+        "Code39",          // ZXing::BarcodeFormat::Code39
+        "Code93",          // ZXing::BarcodeFormat::Code93
+        "Code128",         // ZXing::BarcodeFormat::Code128
+        "DataBar",         // ZXing::BarcodeFormat::DataBar
         "DataBarExpanded", // ZXing::BarcodeFormat::DataBarExpanded
-        "DataMatrix", // ZXing::BarcodeFormat::DataMatrix
-        "EAN8", // ZXing::BarcodeFormat::EAN8
-        "EAN13", // ZXing::BarcodeFormat::EAN13
-        "ITF", // ZXing::BarcodeFormat::ITF
-        "MaxiCode", // ZXing::BarcodeFormat::MaxiCode
-        "PDF417", // ZXing::BarcodeFormat::PDF417
-        "UPCA", // ZXing::BarcodeFormat::UPCA
-        "UPCE", // ZXing::BarcodeFormat::UPCE
-        "MicroQRCode", // ZXing::BarcodeFormat::MicroQRCode
-        "RMQRCode", // ZXing::BarcodeFormat::RMQRCode
-        "DXFilmEdge", // ZXing::BarcodeFormat::DXFilmEdge
-        "DataBarLimited" // ZXing::BarcodeFormat::DataBarLimited
+        "DataMatrix",      // ZXing::BarcodeFormat::DataMatrix
+        "EAN8",            // ZXing::BarcodeFormat::EAN8
+        "EAN13",           // ZXing::BarcodeFormat::EAN13
+        "ITF",             // ZXing::BarcodeFormat::ITF
+        "MaxiCode",        // ZXing::BarcodeFormat::MaxiCode
+        "PDF417",          // ZXing::BarcodeFormat::PDF417
+        "UPCA",            // ZXing::BarcodeFormat::UPCA
+        "UPCE",            // ZXing::BarcodeFormat::UPCE
+        "MicroQRCode",     // ZXing::BarcodeFormat::MicroQRCode
+        "RMQRCode",        // ZXing::BarcodeFormat::RMQRCode
+        "DXFilmEdge",      // ZXing::BarcodeFormat::DXFilmEdge
+        "DataBarLimited"   // ZXing::BarcodeFormat::DataBarLimited
     };
 
 signals:
@@ -115,19 +121,22 @@ private:
      */
     QImage MatToQImage(const cv::Mat& mat) const;
 
-    QLineEdit* filePathEdit; /**< 文件路径输入框，用于显示选择的文件路径 */
-    QPushButton* generateButton; /**< 生成二维码按钮 */
-    QPushButton* decodeToChemFile; /**< 解码并保存为化验文件按钮 */
-    QPushButton* saveButton; /**< 保存二维码图片按钮 */
-    QLabel* barcodeLabel; /**< 用于显示生成的二维码图像或解码文本的标签 */
-    QImage lastImage; /**< 存储最后生成的二维码图像 */
-    QByteArray lastDecodedData; /**< 保存解码后的数据 */
-    QScrollArea* scrollArea; /**< 滚动区域 */
-    QCheckBox* base64CheckBox; /**< 是否使用base64 */
-    QComboBox* formatComboBox; /**< 条码格式选择框 */
-    ZXing::BarcodeFormat currentBarcodeFormat = ZXing::BarcodeFormat::QRCode; /**< 当前选择的条码格式  */
-    QLineEdit* widthInput; /**< 图片宽度输入框  */
-    QLineEdit* heightInput; /**< 图片高度输入框  */
-    QFileDialog* fileDialog; /**< 文件选择弹窗    */
-    std::unique_ptr<MqttSubscriber> subscriber_; /**< MQTT 订阅者实例  */
+    QLineEdit*                              filePathEdit;        /**< 文件路径输入框，用于显示选择的文件路径 */
+    QPushButton*                            generateButton;      /**< 生成二维码按钮 */
+    QPushButton*                            decodeToChemFile;    /**< 解码并保存为化验文件按钮 */
+    QPushButton*                            saveButton;          /**< 保存二维码图片按钮 */
+    QProgressBar*                           progressBar;         /**< 异步动作进度条 */
+    std::vector<convert::result_data_entry> lastResults;         /**< 上次解码产生的结果 */
+    QScrollArea*                            scrollArea;          /**< 滚动区域 */
+    QCheckBox*                              base64CheckBox;      /**< 是否使用base64 */
+    QComboBox*                              formatComboBox;      /**< 条码格式选择框 */
+    QCheckBox*                              enableBatchCheckBox; /**< 是否启用批处理 */
+    ZXing::BarcodeFormat            currentBarcodeFormat = ZXing::BarcodeFormat::QRCode; /**< 当前选择的条码格式  */
+    QLineEdit*                      widthInput;                                          /**< 图片宽度输入框  */
+    QLineEdit*                      heightInput;                                         /**< 图片高度输入框  */
+    QFileDialog*                    fileDialog;                                          /**< 文件选择弹窗    */
+    std::unique_ptr<MqttSubscriber> subscriber_;                                         /**< MQTT 订阅者实例  */
+
+    void renderResults() const;
+    void onBatchFinish(QFutureWatcher<convert::result_data_entry>& watcher);
 };
