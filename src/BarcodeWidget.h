@@ -22,9 +22,9 @@ class QProgressBar;
 
 /**
  * @class BarcodeWidget
- * @brief 该类用于实现 QRCode 二维码图片生成和解析功能的窗口。
+ * @brief 该类用于实现 条码图片生成和解析功能的窗口。
  *
- * BarcodeWidget 提供了一个 GUI 界面，支持用户选择文件、生成二维码、解码二维码内容以及保存生成的二维码图像。
+ * BarcodeWidget 提供了一个 GUI 界面，支持用户选择文件、生成条码、解码条码内容以及保存生成的条码图像。
  */
 class BarcodeWidget : public QWidget {
     Q_OBJECT
@@ -73,22 +73,22 @@ private slots:
     void updateButtonStates(const QString& filePath) const;
 
     /**
-     * @brief 打开文件浏览器并选择一个文件，在文本框显示选择的文件路径。
+     * @brief 打开文件浏览器并选择一个文件、文件夹，在文本框显示选择的路径。
      */
     void onBrowseFile() const;
 
     /**
-     * @brief 根据调用 onBrowseFile 选择的文件生成二维码并显示。
+     * @brief 根据调用 onBrowseFile 选择的文件、文件夹生成条码并显示。
      */
     void onGenerateClicked();
 
     /**
-     * @brief 解码二维码。
+     * @brief 解码条码。
      */
     void onDecodeToChemFileClicked();
 
     /**
-     * @brief 保存当前显示的二维码图像为文件。
+     * @brief 保存当前显示的条码图像为文件。
      */
     void onSaveClicked();
 
@@ -122,9 +122,9 @@ private:
     QImage MatToQImage(const cv::Mat& mat) const;
 
     QLineEdit*                              filePathEdit;        /**< 文件路径输入框，用于显示选择的文件路径 */
-    QPushButton*                            generateButton;      /**< 生成二维码按钮 */
+    QPushButton*                            generateButton;      /**< 生成条码按钮 */
     QPushButton*                            decodeToChemFile;    /**< 解码并保存为化验文件按钮 */
-    QPushButton*                            saveButton;          /**< 保存二维码图片按钮 */
+    QPushButton*                            saveButton;          /**< 保存条码图片按钮 */
     QProgressBar*                           progressBar;         /**< 异步动作进度条 */
     std::vector<convert::result_data_entry> lastResults;         /**< 上次解码产生的结果 */
     QScrollArea*                            scrollArea;          /**< 滚动区域 */
@@ -138,7 +138,7 @@ private:
     std::unique_ptr<MqttSubscriber> subscriber_;                                         /**< MQTT 订阅者实例  */
 
     /**
-    * @brief 渲染并显示解码结果
+    * @brief 渲染并显示结果
     */
     void renderResults() const;
 
