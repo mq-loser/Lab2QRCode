@@ -572,8 +572,8 @@ void BarcodeWidget::onDecodeToChemFileClicked() {
         bool useBase64;
         convert::result_data_entry operator()(QString path) const {
             try {
-                const auto bytes = path.toLocal8Bit().toStdString();
-                switch (auto rst = convert::QRcode_to_byte(bytes); rst.err) {
+                const auto file_path = path.toLocal8Bit().toStdString();
+                switch (auto rst = convert::QRcode_to_byte(file_path); rst.err) {
                 case convert::result_i2t::empty_img:
                     spdlog::error("cv::imread 无法加载图片文件: {}", path.toStdString());
                     return {std::move(path), QString{"无法加载图片文件: %1"}.arg(path).toStdString()};

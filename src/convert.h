@@ -117,8 +117,8 @@ namespace convert{
         }
     };
 
-    [[nodiscard]] inline result_i2t QRcode_to_byte(const std::string& bytes){
-        cv::Mat img = cv::imread(bytes, cv::IMREAD_COLOR);
+    [[nodiscard]] inline result_i2t QRcode_to_byte(const std::string& file_path){
+        const cv::Mat img = cv::imread(file_path, cv::IMREAD_COLOR);
         if (img.empty()) {
             return result_i2t::empty_img;
         }

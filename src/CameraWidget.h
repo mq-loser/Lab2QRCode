@@ -35,7 +35,7 @@ protected:
 
 private:
     void onCameraIndexChanged(int index);
-    void updateFrame(const FrameResult& r);
+    void updateFrame(const FrameResult& r) const;
     void captureLoop();
     void processFrame(cv::Mat& frame, FrameResult& out) const;
 

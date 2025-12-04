@@ -331,7 +331,7 @@ void CameraWidget::processFrame(cv::Mat& frame, FrameResult& out) const
     }
 }
 
-void CameraWidget::updateFrame(const FrameResult& r)
+void CameraWidget::updateFrame(const FrameResult& r) const
 {
     frameWidget->setFrame(r.frame);
 
